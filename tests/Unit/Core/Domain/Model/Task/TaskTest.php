@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit\Core\Domain;
+namespace App\Tests\Unit\Core\Domain\Model\Task;
 
 use App\Core\Domain\Model\Task\Exception\NameToShortException;
 use App\Core\Domain\Model\Task\Status;
@@ -78,5 +78,19 @@ class TaskTest extends TestCase
         $task   = new Task(Uuid::uuid4(), 'name', $userId, Status::UNDONE);
 
         Assert::assertTrue($userId->equals($task->getUserId()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_be_reassigned_to_different_user()
+    {
+        $userId = Uuid::uuid4();
+        $task   = new Task(Uuid::uuid4(), 'name', $userId, Status::UNDONE);
+
+        $newUserId = Uuid::uuid4();
+
+        $task->assignToUser($newUserId);
+        Assert::assertTrue($newUserId->equals($task->getUserId()));
     }
 }

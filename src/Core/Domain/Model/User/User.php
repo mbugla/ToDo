@@ -5,6 +5,7 @@ namespace App\Core\Domain\Model\User;
 
 use App\Shared\Domain\Model\Aggregate;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Webmozart\Assert\Assert;
 
@@ -45,12 +46,8 @@ class User extends Aggregate implements UserInterface
      */
     private \DateTimeImmutable $createdAt;
 
-    /**
-     * @param string         $username
-     * @param string         $password
-     * @param array|string[] $roles
-     */
     public function __construct(
+        UuidInterface $id,
         string $username,
         string $password,
         array $roles = [self::DEFAULT_USER_ROLE]
@@ -59,6 +56,7 @@ class User extends Aggregate implements UserInterface
         $this->setPassword($password);
         $this->setRoles($roles);
         $this->setCreatedAt(new \DateTimeImmutable());
+        $this->id = $id;
     }
 
     public function eraseCredentials(): void

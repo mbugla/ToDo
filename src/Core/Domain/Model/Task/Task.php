@@ -15,9 +15,6 @@ final class Task extends Aggregate
 
     private string $name;
 
-    /**
-     * @var UuidInterface
-     */
     private UuidInterface $userId;
 
     private string $status;
