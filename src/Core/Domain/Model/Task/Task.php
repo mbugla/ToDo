@@ -2,6 +2,7 @@
 
 namespace App\Core\Domain\Model\Task;
 
+use App\Core\Domain\Model\Task\Event\AssignedUserChangedEvent;
 use App\Core\Domain\Model\Task\Event\NameChangedEvent;
 use App\Core\Domain\Model\Task\Event\StatusChangedEvent;
 use App\Core\Domain\Model\Task\Exception\NameToShortException;
@@ -46,7 +47,9 @@ final class Task extends Aggregate
 
     public function assignToUser(UuidInterface $userId)
     {
-
+        $this->assignedUserChanged(
+            new AssignedUserChangedEvent($this->getId(), $userId)
+        );
     }
 
     public function markAsDone()
@@ -75,7 +78,7 @@ final class Task extends Aggregate
 
     public function getUserId(): UuidInterface
     {
-
+        return $this->userId;
     }
 
     private function nameChanged(NameChangedEvent $event): void
@@ -87,6 +90,12 @@ final class Task extends Aggregate
     private function statusChanged(StatusChangedEvent $event): void
     {
         $this->status = $event->getStatus();
+        $this->raise($event);
+    }
+
+    private function assignedUserChanged(AssignedUserChangedEvent $event)
+    {
+        $this->userId = $event->getUserId();
         $this->raise($event);
     }
 }

@@ -12,7 +12,7 @@ abstract class Aggregate
     /**
      * @var DomainEvent[]
      */
-    private array $events;
+    private array $pendingEvents;
 
     public function getId(): UuidInterface
     {
@@ -25,6 +25,6 @@ abstract class Aggregate
 
     protected function raise(DomainEvent $event): void
     {
-        $this->events[] = $event;
+        $this->pendingEvents[] = $event;
     }
 }
