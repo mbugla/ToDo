@@ -58,7 +58,9 @@ final class Task extends Aggregate
 
     public function markAsUndone()
     {
-
+        $this->statusChanged(
+            new StatusChangedEvent($this->getId(), Status::UNDONE)
+        );
     }
 
     public function getName(): string
