@@ -7,7 +7,7 @@ use Ramsey\Uuid\UuidInterface;
 
 interface UserRepositoryInterface
 {
-    public function find(UuidInterface $id): ?User;
+    public function findByUuid(UuidInterface $id): ?User;
 
     public function findUserByUserName(string $username): ?User;
 

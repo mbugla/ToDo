@@ -36,7 +36,7 @@ class InMemoryUserRepositoryTest extends TestCase
     public function it_is_able_to_find_user_by_id(
         UserRepositoryInterface $repository
     ) {
-        $user = $repository->find(self::$user->getId());
+        $user = $repository->findByUuid(self::$user->getId());
 
         Assert::assertInstanceOf(User::class, $user);
     }
@@ -66,7 +66,7 @@ class InMemoryUserRepositoryTest extends TestCase
     ) {
         $repository->remove(self::$user);
 
-        Assert::assertNull($repository->find(self::$user->getId()));
+        Assert::assertNull($repository->findByUuid(self::$user->getId()));
     }
 
     public static function setUpBeforeClass(): void

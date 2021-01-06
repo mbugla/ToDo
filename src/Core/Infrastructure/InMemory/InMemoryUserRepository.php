@@ -11,7 +11,7 @@ class InMemoryUserRepository implements UserRepositoryInterface
     /** @var User[] */
     private array $users = [];
 
-    public function find(UuidInterface $id): ?User
+    public function findByUuid($id): ?User
     {
         if (array_key_exists($id->toString(), $this->users)) {
             return $this->users[$id->toString()];
