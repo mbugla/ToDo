@@ -5,7 +5,7 @@ namespace App\Core\Application\Query;
 
 use Ramsey\Uuid\UuidInterface;
 
-class GetTaskQuery
+final class GetTaskQuery
 {
     /**
      * @var UuidInterface

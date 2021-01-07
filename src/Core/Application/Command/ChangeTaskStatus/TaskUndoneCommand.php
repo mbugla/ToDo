@@ -6,7 +6,7 @@ namespace App\Core\Application\Command\ChangeTaskStatus;
 use Ramsey\Uuid\UuidInterface;
 
 
-class TaskUndoneCommand
+final class TaskUndoneCommand
 {
     /**
      * @var UuidInterface

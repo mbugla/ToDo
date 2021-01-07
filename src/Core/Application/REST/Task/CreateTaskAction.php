@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateTaskAction
+final class CreateTaskAction
 {
     use HandleTrait;
 

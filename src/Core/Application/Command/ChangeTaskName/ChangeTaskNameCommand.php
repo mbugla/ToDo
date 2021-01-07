@@ -5,7 +5,7 @@ namespace App\Core\Application\Command\ChangeTaskName;
 
 use Ramsey\Uuid\UuidInterface;
 
-class ChangeTaskNameCommand
+final class ChangeTaskNameCommand
 {
     /**
      * @var UuidInterface

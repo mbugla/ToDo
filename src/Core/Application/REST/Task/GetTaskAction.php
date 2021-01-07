@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GetTaskAction
+final class GetTaskAction
 {
     use HandleTrait;
 
@@ -41,9 +41,9 @@ class GetTaskAction
      */
     public function __invoke(string $taskId, Request $request): Response
     {
-        $user  = $this->userFetcher->fetchRequiredUser();
+        $user   = $this->userFetcher->fetchRequiredUser();
         $taskId = Uuid::fromString($taskId);
-        $query = new GetTaskQuery($taskId, $user->getId());
+        $query  = new GetTaskQuery($taskId, $user->getId());
 
         $tasks = $this->handle($query);
 

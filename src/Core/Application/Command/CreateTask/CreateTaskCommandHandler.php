@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class CreateTaskCommandHandler implements MessageHandlerInterface
+final class CreateTaskCommandHandler implements MessageHandlerInterface
 {
     private TaskRepositoryInterface $taskRepository;
 

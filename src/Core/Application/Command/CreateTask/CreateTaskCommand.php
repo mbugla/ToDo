@@ -5,7 +5,7 @@ namespace App\Core\Application\Command\CreateTask;
 use App\Core\Domain\Model\Task\Status;
 use Ramsey\Uuid\UuidInterface;
 
-class CreateTaskCommand
+final class CreateTaskCommand
 {
     private string $name;
 

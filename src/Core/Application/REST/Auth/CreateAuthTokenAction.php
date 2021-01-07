@@ -11,7 +11,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateAuthTokenAction
+final class CreateAuthTokenAction
 {
     use HandleTrait;
 

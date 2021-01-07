@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class TaskUndoneCommandHandler implements MessageHandlerInterface
+final class TaskUndoneCommandHandler implements MessageHandlerInterface
 {
     /**
      * @var TaskRepositoryInterface

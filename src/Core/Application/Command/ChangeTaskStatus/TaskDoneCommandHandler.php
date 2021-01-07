@@ -28,21 +28,27 @@ class TaskDoneCommandHandler implements MessageHandlerInterface
      * @param TaskRepositoryInterface $taskRepository
      * @param UserFetcherInterface    $userFetcher
      */
-    public function __construct(TaskRepositoryInterface $taskRepository, UserFetcherInterface $userFetcher)
-    {
+    public function __construct(
+        TaskRepositoryInterface $taskRepository,
+        UserFetcherInterface $userFetcher
+    ) {
         $this->taskRepository = $taskRepository;
-        $this->userFetcher = $userFetcher;
+        $this->userFetcher    = $userFetcher;
     }
 
     public function __invoke(TaskDoneCommand $changeTaskStatusCommand)
     {
-        $task = $this->taskRepository->findByUuid($changeTaskStatusCommand->getTaskId());
+        $task = $this->taskRepository->findByUuid(
+            $changeTaskStatusCommand->getTaskId()
+        );
 
-        if(!$task) {
+        if (!$task) {
             throw new InvalidArgumentException("Task not found");
         }
 
-        if(!$this->userFetcher->fetchRequiredUser()->getId()->equals($task->getUserId())) {
+        if (!$this->userFetcher->fetchRequiredUser()->getId()->equals(
+            $task->getUserId()
+        )) {
             throw new AccessDeniedException();
         }
 

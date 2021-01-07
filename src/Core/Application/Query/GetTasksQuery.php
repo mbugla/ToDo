@@ -5,7 +5,7 @@ namespace App\Core\Application\Query;
 
 use Ramsey\Uuid\UuidInterface;
 
-class GetTasksQuery
+final class GetTasksQuery
 {
     private UuidInterface $userId;
 

@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ChangeTaskNameCommandHandler implements MessageHandlerInterface
+final class ChangeTaskNameCommandHandler implements MessageHandlerInterface
 {
     /**
      * @var TaskRepositoryInterface
