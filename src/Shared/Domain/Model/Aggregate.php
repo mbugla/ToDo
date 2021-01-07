@@ -12,7 +12,7 @@ abstract class Aggregate
     /**
      * @var DomainEvent[]
      */
-    private array $pendingEvents;
+    private array $pendingEvents = [];
 
     public function getId(): UuidInterface
     {
@@ -28,7 +28,7 @@ abstract class Aggregate
         return $this->pendingEvents;
     }
 
-    public function clearPendingEvents(): void
+    public function eventsFlushed(): void
     {
         $this->pendingEvents = [];
     }
