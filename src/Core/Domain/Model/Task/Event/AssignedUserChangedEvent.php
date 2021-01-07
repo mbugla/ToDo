@@ -5,8 +5,10 @@ namespace App\Core\Domain\Model\Task\Event;
 use App\Shared\Domain\Model\DomainEvent;
 use Ramsey\Uuid\UuidInterface;
 
-class AssignedUserChangedEvent implements DomainEvent
+final class AssignedUserChangedEvent implements DomainEvent
 {
+    const TYPE = 'assigned_user_changed';
+
     private UuidInterface $aggregateId;
 
     private UuidInterface $userId;
@@ -27,5 +29,10 @@ class AssignedUserChangedEvent implements DomainEvent
     public function getUserId(): UuidInterface
     {
         return $this->userId;
+    }
+
+    public static function getType(): string
+    {
+        return self::TYPE;
     }
 }

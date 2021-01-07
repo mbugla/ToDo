@@ -23,6 +23,16 @@ abstract class Aggregate
         return $this->id;
     }
 
+    public function getPendingEvents(): array
+    {
+        return $this->pendingEvents;
+    }
+
+    public function clearPendingEvents(): void
+    {
+        $this->pendingEvents = [];
+    }
+
     protected function raise(DomainEvent $event): void
     {
         $this->pendingEvents[] = $event;

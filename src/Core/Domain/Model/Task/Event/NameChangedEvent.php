@@ -7,8 +7,10 @@ use App\Shared\Domain\Model\DomainEvent;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class NameChangedEvent implements DomainEvent
+final class NameChangedEvent implements DomainEvent
 {
+    const TYPE = 'name_changed';
+
     /**
      * @var UuidInterface
      */
@@ -37,5 +39,10 @@ class NameChangedEvent implements DomainEvent
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public static function getType(): string
+    {
+        return self::TYPE;
     }
 }

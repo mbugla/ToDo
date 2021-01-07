@@ -6,8 +6,10 @@ namespace App\Core\Domain\Model\Task\Event;
 use App\Shared\Domain\Model\DomainEvent;
 use Ramsey\Uuid\UuidInterface;
 
-class StatusChangedEvent implements DomainEvent
+final class StatusChangedEvent implements DomainEvent
 {
+    const TYPE = 'status_changed';
+
     private UuidInterface $aggregateId;
 
     private string $status;
@@ -29,5 +31,10 @@ class StatusChangedEvent implements DomainEvent
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public static function getType(): string
+    {
+        return self::TYPE;
     }
 }

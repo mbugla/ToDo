@@ -7,23 +7,25 @@ use App\Core\Domain\Model\Task\Event\NameChangedEvent;
 use App\Core\Domain\Model\Task\Event\StatusChangedEvent;
 use App\Core\Domain\Model\Task\Exception\NameToShortException;
 use App\Shared\Domain\Model\Aggregate;
+use App\Shared\Domain\Model\DomainEvent;
+use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 
 final class Task extends Aggregate
 {
     const NAME_MIN_LENGTH = 2;
 
-    private string $name;
+    private ?string $name;
 
-    private UuidInterface $userId;
+    private ?UuidInterface $userId;
 
     private string $status;
 
     public function __construct(
         UuidInterface $uuid,
-        string $name,
-        UuidInterface $userId,
-        string $status
+        string $name = null,
+        UuidInterface $userId = null,
+        string $status = Status::UNDONE
     ) {
         $this->id     = $uuid;
         $this->name   = $name;
@@ -94,5 +96,24 @@ final class Task extends Aggregate
     {
         $this->userId = $event->getUserId();
         $this->raise($event);
+    }
+
+    public function apply(DomainEvent $event): void
+    {
+        switch ($event->getType()) {
+            case AssignedUserChangedEvent::TYPE:
+                $this->assignedUserChanged($event);
+                break;
+            case NameChangedEvent::TYPE:
+                $this->nameChanged($event);
+                break;
+            case StatusChangedEvent::TYPE:
+                $this->statusChanged($event);
+                break;
+            default:
+                throw new InvalidArgumentException(
+                    sprintf("Type: %s not supported", $event->getType())
+                );
+        }
     }
 }
