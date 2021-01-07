@@ -15,9 +15,9 @@ use function PHPUnit\Framework\isTrue;
  */
 class User extends Aggregate implements UserInterface
 {
-    public const DEFAULT_USER_ROLE    = 'ROLE_USER';
+    public const DEFAULT_USER_ROLE = 'ROLE_USER';
     public const MAX_USER_NAME_LENGTH = 180;
-    public const MAX_PASSWORD_LENGTH  = 255;
+    public const MAX_PASSWORD_LENGTH = 255;
 
     /**
      * @ORM\Id()
@@ -125,7 +125,10 @@ class User extends Aggregate implements UserInterface
             'Username should contain at most %2$s characters. Got: %s'
         );
 
-        Assert::true($this->uniqueUsernameConstraint->isUnique($username));
+        Assert::true(
+            $this->uniqueUsernameConstraint->isUnique($username),
+            sprintf("Username: %s is already taken", $username)
+        );
 
         $this->username = $username;
     }

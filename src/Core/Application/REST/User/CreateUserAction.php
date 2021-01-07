@@ -3,6 +3,8 @@
 namespace App\Core\Application\REST\User;
 
 use App\Core\Application\Command\CreateUser\CreateUserCommand;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +38,14 @@ class CreateUserAction
             $requestData->password
         );
 
-        $this->handle($command);
+        try {
+            $this->handle($command);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                ['message' => $e->getMessage()],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
         return new JsonResponse(null, Response::HTTP_CREATED);
     }

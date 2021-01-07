@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Core\Application\Command\CreateUser;
 
+use App\Core\Domain\Model\User\UniqueUsernameConstraintInterface;
 use App\Core\Domain\Model\User\User;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
@@ -15,12 +16,16 @@ final class CreateUserCommandHandler implements MessageHandlerInterface
 
     private UserRepositoryInterface $userRepository;
 
+    private UniqueUsernameConstraintInterface $uniqueUsernameConstraint;
+
     public function __construct(
         EncoderFactoryInterface $encoderFactory,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        UniqueUsernameConstraintInterface $uniqueUsernameConstraint
     ) {
-        $this->encoderFactory = $encoderFactory;
-        $this->userRepository = $userRepository;
+        $this->encoderFactory           = $encoderFactory;
+        $this->userRepository           = $userRepository;
+        $this->uniqueUsernameConstraint = $uniqueUsernameConstraint;
     }
 
     public function __invoke(CreateUserCommand $command): void
@@ -30,6 +35,7 @@ final class CreateUserCommandHandler implements MessageHandlerInterface
             Uuid::uuid4(),
             $command->getUsername(),
             $encoder->encodePassword($command->getPassword(), null),
+            $this->uniqueUsernameConstraint
         );
         $this->userRepository->add($user);
     }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\Infrastructure\Constraint;
+namespace App\Core\Infrastructure\Constraint\User;
 
 use App\Core\Domain\Model\User\UniqueUsernameConstraintInterface;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
