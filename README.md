@@ -3,6 +3,7 @@
 bash setup_env.sh dev - to setup .env.local docker/.env
 make dc_up - docker-compose up
 make setup_dev - composer install, migrations and so on
+http://127.0.0.1:888 - app base url
 ```
 ###Some words about docker
 In project is used workplace container for code manipulations, CI or building. It was created for preventing of pollution of working containers (php-fpm) of unused in request, building tools like nodejs, composer, dev libs and so on. Also was created a local user based on host machine user PUID PGID to resolve conflicts with file permissions.
