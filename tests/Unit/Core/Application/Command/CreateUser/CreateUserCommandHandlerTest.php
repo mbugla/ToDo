@@ -4,7 +4,7 @@ namespace App\Tests\Unit\Core\Application\Command\CreateUser;
 
 use App\Core\Application\Command\CreateUser\CreateUserCommand;
 use App\Core\Application\Command\CreateUser\CreateUserCommandHandler;
-use App\Core\Infrastructure\InMemory\InMemoryUserRepository;
+use App\Core\Infrastructure\Repository\InMemory\InMemoryUserRepository;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;

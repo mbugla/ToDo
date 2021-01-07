@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Core\Infrastructure\InMemory;
+namespace App\Core\Infrastructure\Repository\InMemory;
 
 use App\Core\Domain\Model\User\User;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
-use Ramsey\Uuid\UuidInterface;
 
 class InMemoryUserRepository implements UserRepositoryInterface
 {

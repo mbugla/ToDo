@@ -30,4 +30,4 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Core\Domain\Model\User\UserRepositoryInterface: '@App\Core\Infrastructure\Doctrine\DoctrineUserRepository'
+    App\Core\Domain\Model\User\UserRepositoryInterface: '@App\Core\Infrastructure\Repository\Doctrine\DoctrineUserRepository'

@@ -5,7 +5,7 @@ namespace App\Tests\Unit\Core\Application\Command\CreateAuthToken;
 use App\Core\Application\Command\CreateAuthToken\CreateAuthTokenCommand;
 use App\Core\Application\Command\CreateAuthToken\CreateAuthTokenCommandHandler;
 use App\Core\Domain\Model\User\User;
-use App\Core\Infrastructure\InMemory\InMemoryUserRepository;
+use App\Core\Infrastructure\Repository\InMemory\InMemoryUserRepository;
 use InvalidArgumentException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use PHPUnit\Framework\Assert;

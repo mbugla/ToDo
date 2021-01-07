@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Webmozart\Assert\Assert;
+use function PHPUnit\Framework\isTrue;
 
 /**
  * @ORM\Entity()
@@ -46,12 +47,19 @@ class User extends Aggregate implements UserInterface
      */
     private \DateTimeImmutable $createdAt;
 
+    /**
+     * @var UniqueUsernameConstraintInterface
+     */
+    private UniqueUsernameConstraintInterface $uniqueUsernameConstraint;
+
     public function __construct(
         UuidInterface $id,
         string $username,
         string $password,
+        UniqueUsernameConstraintInterface $uniqueUsernameConstraint,
         array $roles = [self::DEFAULT_USER_ROLE]
     ) {
+        $this->uniqueUsernameConstraint = $uniqueUsernameConstraint;
         $this->setUsername($username);
         $this->setPassword($password);
         $this->setRoles($roles);
@@ -116,6 +124,9 @@ class User extends Aggregate implements UserInterface
             self::MAX_USER_NAME_LENGTH,
             'Username should contain at most %2$s characters. Got: %s'
         );
+
+        Assert::true($this->uniqueUsernameConstraint->isUnique($username));
+
         $this->username = $username;
     }
 
