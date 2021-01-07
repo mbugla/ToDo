@@ -8,6 +8,7 @@ use App\Core\Domain\Model\Task\Event\StatusChangedEvent;
 use App\Core\Domain\Model\Task\Exception\NameToShortException;
 use App\Shared\Domain\Model\Aggregate;
 use App\Shared\Domain\Model\DomainEvent;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 
@@ -29,15 +30,15 @@ final class Task extends Aggregate
     ) {
         $this->id = $uuid;
         if ($name) {
-            $this->changeName($name);
+            $this->changeName($name, new DateTimeImmutable());
         }
         if ($userId) {
-            $this->assignToUser($userId);
+            $this->assignToUser($userId, new DateTimeImmutable());
         }
-        $this->handleStatus($status);
+        $this->handleStatus($status, new DateTimeImmutable());
     }
 
-    public function changeName(string $name)
+    public function changeName(string $name, DateTimeImmutable $dateTime)
     {
         if (strlen($name) < self::NAME_MIN_LENGTH) {
             throw new NameToShortException(
@@ -45,27 +46,31 @@ final class Task extends Aggregate
             );
         }
 
-        $this->nameChanged(new NameChangedEvent($this->getId(), $name));
+        $this->nameChanged(
+            new NameChangedEvent($this->getId(), $name, $dateTime)
+        );
     }
 
-    public function assignToUser(UuidInterface $userId): void
-    {
+    public function assignToUser(
+        UuidInterface $userId,
+        DateTimeImmutable $dateTime
+    ): void {
         $this->assignedUserChanged(
-            new AssignedUserChangedEvent($this->getId(), $userId)
+            new AssignedUserChangedEvent($this->getId(), $userId, $dateTime)
         );
     }
 
-    public function markAsDone()
+    public function markAsDone(DateTimeImmutable $dateTime)
     {
         $this->statusChanged(
-            new StatusChangedEvent($this->getId(), Status::DONE)
+            new StatusChangedEvent($this->getId(), Status::DONE, $dateTime)
         );
     }
 
-    public function markAsUndone()
+    public function markAsUndone(DateTimeImmutable $dateTime)
     {
         $this->statusChanged(
-            new StatusChangedEvent($this->getId(), Status::UNDONE)
+            new StatusChangedEvent($this->getId(), Status::UNDONE, $dateTime)
         );
     }
 
@@ -135,14 +140,14 @@ final class Task extends Aggregate
     /**
      * @param string $status
      */
-    private function handleStatus(string $status): void
+    private function handleStatus(string $status, DateTimeImmutable $dateTime): void
     {
         switch ($status) {
             case Status::DONE:
-                $this->markAsDone();
+                $this->markAsDone($dateTime);
                 break;
             case Status::UNDONE:
-                $this->markAsUndone();
+                $this->markAsUndone($dateTime);
                 break;
         }
     }

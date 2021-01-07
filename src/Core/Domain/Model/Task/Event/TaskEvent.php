@@ -82,4 +82,47 @@ class TaskEvent
     {
         return $this->createdAt;
     }
+
+    /**
+     * @param string $type
+     *
+     * @return TaskEvent
+     */
+    public function setType(string $type): TaskEvent
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return TaskEvent
+     */
+    public function setValue(string $value): TaskEvent
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $taskId
+     *
+     * @return TaskEvent
+     */
+    public function setTaskId(string $taskId): TaskEvent
+    {
+        $this->taskId = Uuid::fromString($taskId);
+
+        return $this;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): TaskEvent
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
 }

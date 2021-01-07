@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core\Application\Command\ChangeTaskStatus;
 
 use App\Core\Domain\Model\Task\TaskRepositoryInterface;
+use DateTimeImmutable;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class TaskUndoneCommandHandler implements MessageHandlerInterface
@@ -22,7 +23,7 @@ class TaskUndoneCommandHandler implements MessageHandlerInterface
     {
         $task = $this->taskRepository->findByUuid($changeTaskStatusCommand->getTaskId());
 
-        $task->markAsUndone();
+        $task->markAsUndone(new DateTimeImmutable());
 
         $this->taskRepository->save($task);
     }

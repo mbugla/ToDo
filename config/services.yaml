@@ -31,3 +31,4 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Core\Domain\Model\User\UserRepositoryInterface: '@App\Core\Infrastructure\Repository\Doctrine\DoctrineUserRepository'
+    App\Core\Domain\Model\Task\TaskRepositoryInterface: '@App\Core\Infrastructure\Repository\Doctrine\DoctrineTaskRepository'

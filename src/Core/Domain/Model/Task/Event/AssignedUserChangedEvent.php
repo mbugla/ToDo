@@ -3,6 +3,7 @@
 namespace App\Core\Domain\Model\Task\Event;
 
 use App\Shared\Domain\Model\DomainEvent;
+use DateTimeImmutable;
 use Ramsey\Uuid\UuidInterface;
 
 final class AssignedUserChangedEvent implements DomainEvent
@@ -13,12 +14,16 @@ final class AssignedUserChangedEvent implements DomainEvent
 
     private UuidInterface $userId;
 
+    private DateTimeImmutable $createdAt;
+
     public function __construct(
         UuidInterface $aggregateId,
-        UuidInterface $userId
+        UuidInterface $userId,
+        DateTimeImmutable $createdAt
     ) {
         $this->aggregateId = $aggregateId;
         $this->userId      = $userId;
+        $this->createdAt   = $createdAt;
     }
 
     public function getAggregateId(): UuidInterface
@@ -34,5 +39,15 @@ final class AssignedUserChangedEvent implements DomainEvent
     public static function getType(): string
     {
         return self::TYPE;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getValue()
+    {
+        return $this->userId;
     }
 }

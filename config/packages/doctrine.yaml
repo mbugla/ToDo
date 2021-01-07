@@ -14,5 +14,11 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 dir: '%kernel.project_dir%/src/Core/Domain/Model/User'
-                prefix: 'App\Core\Domain\Model\'
+                prefix: 'App\Core\Domain\Model\User'
                 alias: User
+            TaskEvent:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Core/Domain/Model/Task/Event'
+                prefix: 'App\Core\Domain\Model\Task\Event'
+                alias: TaskEvent

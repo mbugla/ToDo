@@ -3,6 +3,7 @@
 namespace App\Core\Application\Command\ChangeTaskName;
 
 use App\Core\Domain\Model\Task\TaskRepositoryInterface;
+use DateTimeImmutable;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class ChangeTaskNameCommandHandler implements MessageHandlerInterface
@@ -23,7 +24,7 @@ class ChangeTaskNameCommandHandler implements MessageHandlerInterface
             $changeTaskNameCommand->getTaskId()
         );
 
-        $task->changeName($changeTaskNameCommand->getName());
+        $task->changeName($changeTaskNameCommand->getName(), new DateTimeImmutable());
 
         $this->taskRepository->save($task);
     }

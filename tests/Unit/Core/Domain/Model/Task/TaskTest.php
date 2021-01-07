@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Core\Domain\Model\Task;
 use App\Core\Domain\Model\Task\Exception\NameToShortException;
 use App\Core\Domain\Model\Task\Status;
 use App\Core\Domain\Model\Task\Task;
+use DateTimeImmutable;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -28,7 +29,7 @@ class TaskTest extends TestCase
     {
         $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
-        $task->changeName('new name');
+        $task->changeName('new name', new DateTimeImmutable());
 
         Assert::assertEquals('new name', $task->getName());
     }
@@ -42,7 +43,7 @@ class TaskTest extends TestCase
 
         $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
-        $task->changeName('n');
+        $task->changeName('n', new DateTimeImmutable());
     }
 
     /**
@@ -52,7 +53,7 @@ class TaskTest extends TestCase
     {
         $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
-        $task->markAsDone();
+        $task->markAsDone(new DateTimeImmutable());
 
         Assert::assertEquals(Status::DONE, $task->getStatus());
     }
@@ -64,7 +65,7 @@ class TaskTest extends TestCase
     {
         $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::DONE);
 
-        $task->markAsUndone();
+        $task->markAsUndone(new DateTimeImmutable());
 
         Assert::assertEquals(Status::UNDONE, $task->getStatus());
     }
@@ -90,7 +91,7 @@ class TaskTest extends TestCase
 
         $newUserId = Uuid::uuid4();
 
-        $task->assignToUser($newUserId);
+        $task->assignToUser($newUserId, new DateTimeImmutable());
         Assert::assertTrue($newUserId->equals($task->getUserId()));
     }
 }
