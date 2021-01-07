@@ -10,6 +10,7 @@ use App\Core\Domain\Model\Task\Status;
 use App\Core\Domain\Model\User\UserFetcherInterface;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,23 +39,24 @@ class UpdateTaskAction
     }
 
     /**
-     * @Route("/api/tasks/{taskId}", methods={"PUT"})
+     * @Route("/api/tasks/{taskId}", methods={"PATCH"})
      *
+     * @param string  $taskId
      * @param Request $request
      *
      * @return Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(string $taskId, Request $request): Response
     {
         $requestData = json_decode($request->getContent());
 
-        $taskId = Uuid::fromString($requestData->taskId);
+        $taskId = Uuid::fromString($taskId);
 
-        if(isset($requestData->status)) {
+        if (isset($requestData->status)) {
             $this->handleStatus($requestData, $taskId);
         }
 
-        if(isset($requestData->name)) {
+        if (isset($requestData->name)) {
             $command = new ChangeTaskNameCommand($taskId, $requestData->name);
             $this->handle($command);
         }
@@ -64,12 +66,10 @@ class UpdateTaskAction
 
     /**
      * @param                            $requestData
-     * @param \Ramsey\Uuid\UuidInterface $taskId
+     * @param UuidInterface              $taskId
      */
-    protected function handleStatus(
-        $requestData,
-        \Ramsey\Uuid\UuidInterface $taskId
-    ): void {
+    protected function handleStatus($requestData, UuidInterface $taskId): void
+    {
         switch ($requestData->status) {
             case Status::DONE:
                 $command = new TaskDoneCommand($taskId);

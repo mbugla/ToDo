@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Core\Domain\Model\Task\Event;
 
+use App\Shared\Domain\Model\DomainEvent;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -22,7 +23,12 @@ class TaskEvent
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private UuidInterface $taskId;
+    private $taskId;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $userId;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -124,5 +130,39 @@ class TaskEvent
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @return UuidInterface
+     */
+    public function getUserId(): UuidInterface
+    {
+        if (is_string($this->userId)) {
+            $this->userId = Uuid::fromString($this->userId);
+        }
+
+        return $this->userId;
+    }
+
+    public function setUserId(string $userId): TaskEvent
+    {
+        $this->userId = Uuid::fromString($userId);
+
+        return $this;
+    }
+
+    public static function fromDomainEvent(
+        DomainEvent $domainEvent,
+        UuidInterface $userId
+    ): TaskEvent {
+        $taskEvent = new self();
+        $taskEvent
+            ->setTaskId($domainEvent->getAggregateId()->toString())
+            ->setType($domainEvent::getType())
+            ->setValue($domainEvent->getValue())
+            ->setCreatedAt($domainEvent->getCreatedAt())
+            ->setUserId($userId->toString());
+
+        return $taskEvent;
     }
 }

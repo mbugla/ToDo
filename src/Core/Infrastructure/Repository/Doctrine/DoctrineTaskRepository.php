@@ -8,7 +8,6 @@ use App\Core\Domain\Model\Task\Event\StatusChangedEvent;
 use App\Core\Domain\Model\Task\Event\TaskEvent;
 use App\Core\Domain\Model\Task\Task;
 use App\Core\Domain\Model\Task\TaskRepositoryInterface;
-use App\Core\Domain\Model\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Uuid;
@@ -25,7 +24,10 @@ class DoctrineTaskRepository extends ServiceEntityRepository implements TaskRepo
 
     public function findByUser(UuidInterface $userId): array
     {
-        // TODO: Implement findByUser() method.
+        /** @var TaskEvent[] $events */
+        $events = $this->findBy(['userId' => $userId->toString()]);
+
+        return $this->getTasks($events);
     }
 
     public function findByUuid(UuidInterface $id): ?Task
@@ -46,12 +48,9 @@ class DoctrineTaskRepository extends ServiceEntityRepository implements TaskRepo
             ->execute();
 
         foreach ($task->getPendingEvents() as $pending) {
-            $taskEvent = new TaskEvent();
-            $taskEvent
-                ->setTaskId($task->getId()->toString())
-                ->setType($pending::getType())
-                ->setValue($pending->getValue())
-                ->setCreatedAt($pending->getCreatedAt());
+            $taskEvent =
+                TaskEvent::fromDomainEvent($pending, $task->getUserId());
+
             $this->_em->persist($taskEvent);
         }
 
@@ -111,5 +110,27 @@ class DoctrineTaskRepository extends ServiceEntityRepository implements TaskRepo
         }
 
         return Task::recreateFrom($id, $domainEvents);
-}
+    }
+
+    /**
+     * @param array $events
+     *
+     * @return array|Task[]
+     */
+    private function getTasks(array $events): array
+    {
+        $tasksEvents = [];
+        $tasks       = [];
+
+        foreach ($events as $event) {
+            $tasksEvents[$event->getTaskId()->toString()][] = $event;
+        }
+
+        foreach ($tasksEvents as $taskId => $taskEvents) {
+            $tasks[] =
+                $this->getTask($taskEvents, Uuid::fromString($taskId));
+        }
+
+        return $tasks;
+    }
 }

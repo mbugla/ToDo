@@ -10,9 +10,10 @@ use App\Shared\Domain\Model\Aggregate;
 use App\Shared\Domain\Model\DomainEvent;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use JsonSerializable;
 use Ramsey\Uuid\UuidInterface;
 
-final class Task extends Aggregate
+final class Task extends Aggregate implements JsonSerializable
 {
     const NAME_MIN_LENGTH = 2;
 
@@ -140,8 +141,10 @@ final class Task extends Aggregate
     /**
      * @param string $status
      */
-    private function handleStatus(string $status, DateTimeImmutable $dateTime): void
-    {
+    private function handleStatus(
+        string $status,
+        DateTimeImmutable $dateTime
+    ): void {
         switch ($status) {
             case Status::DONE:
                 $this->markAsDone($dateTime);
@@ -150,5 +153,14 @@ final class Task extends Aggregate
                 $this->markAsUndone($dateTime);
                 break;
         }
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id'     => $this->getId()->toString(),
+            'name'   => $this->getName(),
+            'status' => $this->getStatus(),
+        ];
     }
 }
