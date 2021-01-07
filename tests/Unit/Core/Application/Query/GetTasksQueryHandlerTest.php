@@ -22,10 +22,20 @@ class GetTasksQueryHandlerTest extends TestCase
     public function it_should_return_tasks_for_user()
     {
         $taskRepository = new InMemoryTaskRepository();
+        $userFetcher    = $this->createMock(UserFetcherInterface::class);
         $userId         = Uuid::uuid4();
-        $taskId         = Uuid::uuid4();
 
-        $task = new Task($taskId, $userId, 'name', Status::UNDONE);
+        $user = new User(
+            $userId,
+            'user',
+            'pass',
+            UserTest::getUniqueUsernameConstraint()
+        );
+        $userFetcher->expects($this->once())
+            ->method('fetchRequiredUser')
+            ->willReturn($user);
+
+        $task  = new Task(Uuid::uuid4(), $userId, 'name', Status::UNDONE);
         $task2 = new Task(Uuid::uuid4(), $userId, 'second task', Status::DONE);
         $task3 = new Task(
             Uuid::uuid4(), Uuid::uuid4(), 'diffrent task', Status::DONE
@@ -35,7 +45,7 @@ class GetTasksQueryHandlerTest extends TestCase
         $taskRepository->save($task3);
         $query = new GetTasksQuery($userId);
 
-        $handler = new GetTasksQueryHandler($taskRepository);
+        $handler = new GetTasksQueryHandler($taskRepository, $userFetcher);
 
         $tasks = $handler($query);
 
