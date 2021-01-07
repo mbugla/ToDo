@@ -1,10 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace App\Core\Application\REST\User;
+namespace App\Core\Application\REST\Auth;
 
-use App\Core\Application\Command\CreateUser\CreateUserCommand;
-use Exception;
-use InvalidArgumentException;
+use App\Core\Application\Command\CreateAuthToken\CreateAuthTokenCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +11,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateUserAction
+class CreateAuthTokenAction
 {
     use HandleTrait;
 
@@ -22,7 +21,7 @@ class CreateUserAction
     }
 
     /**
-     * @Route("/api/users", methods={"POST"})
+     * @Route("/api/auth-token", methods={"POST"})
      *
      * @param Request $request
      *
@@ -31,20 +30,12 @@ class CreateUserAction
     public function __invoke(Request $request): Response
     {
         $requestData = json_decode($request->getContent());
-        $command     = new CreateUserCommand(
+
+        $token = $this->handle(new CreateAuthTokenCommand(
             $requestData->username,
             $requestData->password
-        );
+        ));
 
-        try {
-            $this->handle($command);
-        } catch (Exception $e) {
-            return new JsonResponse(
-                ['message' => $e->getMessage()],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        return new JsonResponse(['token' => $token], Response::HTTP_CREATED);
     }
 }

@@ -6,9 +6,10 @@ namespace App\Core\Application\Command\CreateAuthToken;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
 use InvalidArgumentException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-final class CreateAuthTokenCommandHandler
+final class CreateAuthTokenCommandHandler implements MessageHandlerInterface
 {
     private UserPasswordEncoderInterface $userPasswordEncoder;
 
