@@ -1,0 +1,23 @@
+nelmio_api_doc:
+    models: { use_jms: false }
+    documentation:
+        servers:
+            - url: http://127.0.0.1:888
+              description: API over HTTP
+            - url: https://127.0.0.1:444
+              description: API over HTTPS
+        info:
+            title: ToDo app
+            description: This is an ToDo App REST API
+            version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

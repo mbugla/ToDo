@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 final class CreateTaskAction
 {
@@ -38,6 +39,26 @@ final class CreateTaskAction
      * @param Request $request
      *
      * @return Response
+     *
+     * @OA\RequestBody(
+     *     description="Json payload",
+     *     required=true,
+     *     @OA\JsonContent(
+     *       required={"name"},
+     *       example="{name: task name}",
+     *       @OA\Property(property="name", type="string", format="name", example="first task"),
+     *     )
+     * )
+     * @OA\Response(
+     *     response=Response::HTTP_CREATED,
+     *     description="Task created",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="id", type="string", format="id"),
+     *     )
+     * )
+     * @OA\Response(response=Response::HTTP_UNAUTHORIZED, description="Not authorized")
+     *
+     * @OA\Tag(name="Tasks")
      */
     public function __invoke(Request $request): Response
     {
@@ -48,8 +69,6 @@ final class CreateTaskAction
         $command = new CreateTaskCommand($requestData->name, $user->getId());
 
         $id = $this->handle($command);
-
-        $a = 1;
 
         return new JsonResponse(
             ['id' => $id->toString()],

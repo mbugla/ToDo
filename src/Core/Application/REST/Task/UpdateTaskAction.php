@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 final class UpdateTaskAction
 {
@@ -45,6 +46,23 @@ final class UpdateTaskAction
      * @param Request $request
      *
      * @return Response
+     *
+     * @OA\RequestBody(
+     *     description="Json payload",
+     *     required=true,
+     *     @OA\JsonContent(
+     *       example="{name: task name}",
+     *       @OA\Property(property="name", type="string", format="name", example="first task"),
+     *       @OA\Property(property="status", type="string", format="status", example="done"),
+     *     )
+     * )
+     * @OA\Response(
+     *     response=Response::HTTP_ACCEPTED,
+     *     description="Task updated"
+     * )
+     * @OA\Response(response=Response::HTTP_UNAUTHORIZED, description="Not authorized")
+     *
+     * @OA\Tag(name="Tasks")
      */
     public function __invoke(string $taskId, Request $request): Response
     {
