@@ -7,6 +7,7 @@ use App\Core\Application\Command\ChangeTaskName\ChangeTaskNameCommandHandler;
 use App\Core\Domain\Model\Task\Status;
 use App\Core\Domain\Model\Task\Task;
 use App\Core\Infrastructure\Repository\InMemory\InMemoryTaskRepository;
+use Exception;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -22,12 +23,12 @@ class ChangeTaskNameCommandHandlerTest extends TestCase
 
         $taskId = Uuid::uuid4();
         $userId = Uuid::uuid4();
-        $task   = new Task($taskId, $userId,'name', Status::UNDONE);
+        $task   = new Task($taskId, $userId, 'name', Status::UNDONE);
         $taskRepository->save($task);
 
         $command = new ChangeTaskNameCommand($taskId, 'changed name');
 
-        $handler = new ChangeTaskNameCommandHandler();
+        $handler = new ChangeTaskNameCommandHandler($taskRepository);
 
         $handler($command);
 
@@ -45,14 +46,18 @@ class ChangeTaskNameCommandHandlerTest extends TestCase
 
         $taskId = Uuid::uuid4();
         $userId = Uuid::uuid4();
-        $task   = new Task($taskId, $userId,'name', Status::UNDONE);
+        $task   = new Task($taskId, $userId, 'name', Status::UNDONE);
         $taskRepository->save($task);
 
         $command = new ChangeTaskNameCommand($taskId, 'n');
 
-        $handler = new ChangeTaskNameCommandHandler();
+        $handler = new ChangeTaskNameCommandHandler($taskRepository);
 
-        $handler($command);
+        try {
+            $handler($command);
+        } catch (Exception $e) {
+            Assert::assertTrue(true);
+        }
 
         $task = $taskRepository->findByUuid($taskId);
 
