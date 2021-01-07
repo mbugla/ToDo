@@ -83,7 +83,7 @@ class UserTest extends TestCase
         );
     }
 
-    protected function getUniqueUsernameConstraint(bool $isValid = true
+    public static function getUniqueUsernameConstraint(bool $isValid = true
     ): UniqueUsernameConstraintInterface {
         return new class($isValid) implements UniqueUsernameConstraintInterface {
             private $isValid;

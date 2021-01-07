@@ -4,7 +4,8 @@ namespace App\Tests\Unit\Core\Infrastructure\InMemory;
 
 use App\Core\Domain\Model\User\User;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
-use App\Core\Infrastructure\InMemory\InMemoryUserRepository;
+use App\Core\Infrastructure\Repository\InMemory\InMemoryUserRepository;
+use App\Tests\Unit\Core\Domain\Model\User\UserTest;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -73,6 +74,11 @@ class InMemoryUserRepositoryTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$user = $user = new User(Uuid::uuid4(), 'john', 'pass');
+        self::$user = $user = new User(
+            Uuid::uuid4(),
+            'john',
+            'pass',
+            UserTest::getUniqueUsernameConstraint()
+        );
     }
 }

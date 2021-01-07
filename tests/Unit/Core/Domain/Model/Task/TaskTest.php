@@ -50,7 +50,7 @@ class TaskTest extends TestCase
      */
     public function it_can_be_marked_as_done()
     {
-        $task = new Task(Uuid::uuid4(), 'name', Uuid::uuid4(), Status::UNDONE);
+        $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
         $task->markAsDone();
 
@@ -62,7 +62,7 @@ class TaskTest extends TestCase
      */
     public function it_can_be_marked_as_undone()
     {
-        $task = new Task(Uuid::uuid4(), 'name', Uuid::uuid4(), Status::DONE);
+        $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::DONE);
 
         $task->markAsUndone();
 
@@ -75,7 +75,7 @@ class TaskTest extends TestCase
     public function it_belongs_to_one_user()
     {
         $userId = Uuid::uuid4();
-        $task   = new Task(Uuid::uuid4(), 'name', $userId, Status::UNDONE);
+        $task   = new Task(Uuid::uuid4(), $userId, 'name', Status::UNDONE);
 
         Assert::assertTrue($userId->equals($task->getUserId()));
     }
@@ -86,7 +86,7 @@ class TaskTest extends TestCase
     public function it_can_be_reassigned_to_different_user()
     {
         $userId = Uuid::uuid4();
-        $task   = new Task(Uuid::uuid4(), 'name', $userId, Status::UNDONE);
+        $task   = new Task(Uuid::uuid4(), $userId, 'name', Status::UNDONE);
 
         $newUserId = Uuid::uuid4();
 

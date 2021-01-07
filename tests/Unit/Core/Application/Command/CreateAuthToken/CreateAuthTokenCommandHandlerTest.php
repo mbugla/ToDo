@@ -6,6 +6,7 @@ use App\Core\Application\Command\CreateAuthToken\CreateAuthTokenCommand;
 use App\Core\Application\Command\CreateAuthToken\CreateAuthTokenCommandHandler;
 use App\Core\Domain\Model\User\User;
 use App\Core\Infrastructure\Repository\InMemory\InMemoryUserRepository;
+use App\Tests\Unit\Core\Domain\Model\User\UserTest;
 use InvalidArgumentException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use PHPUnit\Framework\Assert;
@@ -20,7 +21,12 @@ class CreateAuthTokenCommandHandlerTest extends TestCase
      */
     public function it_should_return_token_for_valid_user()
     {
-        $user       = new User(Uuid::uuid4(), 'john', 'pass');
+        $user       = new User(
+            Uuid::uuid4(),
+            'john',
+            'pass',
+            UserTest::getUniqueUsernameConstraint()
+        );
         $repository = new InMemoryUserRepository();
         $repository->add($user);
 
@@ -69,7 +75,12 @@ class CreateAuthTokenCommandHandlerTest extends TestCase
      */
     public function it_should_not_return_token_for_invalid_user_password()
     {
-        $user       = new User(Uuid::uuid4(), 'john', 'pass');
+        $user       = new User(
+            Uuid::uuid4(),
+            'john',
+            'pass',
+            UserTest::getUniqueUsernameConstraint()
+        );
         $repository = new InMemoryUserRepository();
         $repository->add($user);
 

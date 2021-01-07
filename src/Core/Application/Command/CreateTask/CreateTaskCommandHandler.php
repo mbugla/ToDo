@@ -21,8 +21,8 @@ class CreateTaskCommandHandler implements MessageHandlerInterface
     {
         $task = new Task(
             Uuid::uuid4(),
-            $createTaskCommand->getName(),
             $createTaskCommand->getUserId(),
+            $createTaskCommand->getName(),
             $createTaskCommand->getStatus()
         );
 

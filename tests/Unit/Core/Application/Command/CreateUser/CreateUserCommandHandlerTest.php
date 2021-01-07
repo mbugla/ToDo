@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Core\Application\Command\CreateUser;
 use App\Core\Application\Command\CreateUser\CreateUserCommand;
 use App\Core\Application\Command\CreateUser\CreateUserCommandHandler;
 use App\Core\Infrastructure\Repository\InMemory\InMemoryUserRepository;
+use App\Tests\Unit\Core\Domain\Model\User\UserTest;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -33,7 +34,11 @@ class CreateUserCommandHandlerTest extends TestCase
             ->with('doe')
             ->willReturn('encoded');
 
-        $handler = new CreateUserCommandHandler($passwordEncoderFactory, $repo);
+        $handler = new CreateUserCommandHandler(
+            $passwordEncoderFactory,
+            $repo,
+            UserTest::getUniqueUsernameConstraint()
+        );
         $handler($command);
 
         $user = $repo->findByUsername('john');
