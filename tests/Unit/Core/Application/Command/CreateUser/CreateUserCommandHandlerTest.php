@@ -36,7 +36,7 @@ class CreateUserCommandHandlerTest extends TestCase
         $handler = new CreateUserCommandHandler($passwordEncoderFactory, $repo);
         $handler($command);
 
-        $user = $repo->findUserByUserName('john');
+        $user = $repo->findByUsername('john');
 
         Assert::assertEquals('encoded', $user->getPassword());
         Assert::assertEquals('john', $user->getUsername());

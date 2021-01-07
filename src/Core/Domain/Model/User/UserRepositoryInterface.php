@@ -9,7 +9,7 @@ interface UserRepositoryInterface
 {
     public function findByUuid(UuidInterface $id): ?User;
 
-    public function findUserByUserName(string $username): ?User;
+    public function findByUsername(string $username): ?User;
 
     public function add(User $user): void;
 

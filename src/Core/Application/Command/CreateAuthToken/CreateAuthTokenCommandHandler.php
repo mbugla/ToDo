@@ -29,7 +29,7 @@ final class CreateAuthTokenCommandHandler
     public function __invoke(CreateAuthTokenCommand $command): string
     {
         $user =
-            $this->userRepository->findUserByUserName($command->getUsername());
+            $this->userRepository->findByUsername($command->getUsername());
 
         if ($user === null) {
             throw new InvalidArgumentException('Invalid credentials');

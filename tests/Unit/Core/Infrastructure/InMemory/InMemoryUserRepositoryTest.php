@@ -50,7 +50,7 @@ class InMemoryUserRepositoryTest extends TestCase
     public function it_is_able_to_find_user_by_username(
         UserRepositoryInterface $repository
     ) {
-        $user = $repository->findUserByUserName('john');
+        $user = $repository->findByUsername('john');
 
         Assert::assertInstanceOf(User::class, $user);
     }

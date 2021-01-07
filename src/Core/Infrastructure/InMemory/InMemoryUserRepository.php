@@ -20,7 +20,7 @@ class InMemoryUserRepository implements UserRepositoryInterface
         return null;
     }
 
-    public function findUserByUserName(string $username): ?User
+    public function findByUsername(string $username): ?User
     {
         foreach ($this->users as $id => $user) {
             if ($user->getUsername() === $username) {

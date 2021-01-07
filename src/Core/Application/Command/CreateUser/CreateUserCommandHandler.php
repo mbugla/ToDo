@@ -6,9 +6,10 @@ namespace App\Core\Application\Command\CreateUser;
 use App\Core\Domain\Model\User\User;
 use App\Core\Domain\Model\User\UserRepositoryInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-final class CreateUserCommandHandler
+final class CreateUserCommandHandler implements MessageHandlerInterface
 {
     private EncoderFactoryInterface $encoderFactory;
 
@@ -25,7 +26,7 @@ final class CreateUserCommandHandler
     public function __invoke(CreateUserCommand $command): void
     {
         $encoder = $this->encoderFactory->getEncoder(User::class);
-        $user = new User(
+        $user    = new User(
             Uuid::uuid4(),
             $command->getUsername(),
             $encoder->encodePassword($command->getPassword(), null),
