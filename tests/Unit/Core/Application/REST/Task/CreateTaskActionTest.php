@@ -13,9 +13,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\BusNameStamp;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
-use Symfony\Component\Messenger\Stamp\StampInterface;
 
 class CreateTaskActionTest extends TestCase
 {
@@ -24,7 +22,7 @@ class CreateTaskActionTest extends TestCase
      */
     public function should_create_new_task_for_user()
     {
-        $messageBus  = $this->createMock(MessageBusInterface::class);
+        $messageBus = $this->createMock(MessageBusInterface::class);
         $userFetcher = $this->createMock(UserFetcherInterface::class);
 
         $user = new User(
@@ -42,7 +40,12 @@ class CreateTaskActionTest extends TestCase
             ->willReturn(
                 new Envelope(
                     new CreateTaskCommand('first task', $user->getId()),
-                    [new HandledStamp('', CreateTaskCommandHandler::class)]
+                    [
+                        new HandledStamp(
+                            Uuid::uuid4(),
+                            CreateTaskCommandHandler::class
+                        ),
+                    ]
                 )
             );
         $action = new CreateTaskAction($messageBus, $userFetcher);

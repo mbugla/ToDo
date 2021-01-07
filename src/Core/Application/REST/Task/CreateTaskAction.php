@@ -47,8 +47,13 @@ class CreateTaskAction
 
         $command = new CreateTaskCommand($requestData->name, $user->getId());
 
-        $this->handle($command);
+        $id = $this->handle($command);
 
-        return new JsonResponse();
+        $a = 1;
+
+        return new JsonResponse(
+            ['id' => $id->toString()],
+            Response::HTTP_CREATED
+        );
     }
 }

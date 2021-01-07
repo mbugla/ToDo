@@ -20,16 +20,15 @@ class CreateTaskCommandHandlerTest extends TestCase
         $taskRepository = new InMemoryTaskRepository();
         $handler        = new CreateTaskCommandHandler($taskRepository);
 
-        $userId    = Uuid::uuid4();
+        $userId  = Uuid::uuid4();
         $command = new CreateTaskCommand('task', $userId);
 
         $handler($command);
 
         $userTasks = $taskRepository->findByUser($userId);
-        $task  = array_shift($userTasks);
+        $task      = array_shift($userTasks);
 
         Assert::assertInstanceOf(Task::class, $task);
         Assert::assertEquals('task', $task->getName());
-
     }
 }
