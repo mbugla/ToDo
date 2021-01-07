@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace App\Core\Application\Command\ChangeTaskStatus;
 
 use App\Core\Domain\Model\Task\TaskRepositoryInterface;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class ChangeTaskStatusCommandHandler implements MessageHandlerInterface
+class TaskDoneCommandHandler implements MessageHandlerInterface
 {
     /**
      * @var TaskRepositoryInterface
@@ -19,7 +18,10 @@ class ChangeTaskStatusCommandHandler implements MessageHandlerInterface
         $this->taskRepository = $taskRepository;
     }
 
-    public function __invoke(ChangeTaskStatusCommand $changeTaskStatusCommand)
+    public function __invoke(TaskDoneCommand $changeTaskStatusCommand)
     {
+        $task = $this->taskRepository->findByUuid($changeTaskStatusCommand->getTaskId());
+
+        $task->markAsDone();
     }
 }

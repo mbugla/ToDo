@@ -6,19 +6,16 @@ namespace App\Core\Application\Command\ChangeTaskStatus;
 use Ramsey\Uuid\UuidInterface;
 
 
-class ChangeTaskStatusCommand
+class TaskDoneCommand
 {
     /**
      * @var UuidInterface
      */
     private UuidInterface $taskId;
 
-    private string $status;
-
-    public function __construct(UuidInterface $taskId, string $status)
+    public function __construct(UuidInterface $taskId)
     {
         $this->taskId = $taskId;
-        $this->status = $status;
     }
 
     /**
@@ -27,13 +24,5 @@ class ChangeTaskStatusCommand
     public function getTaskId(): UuidInterface
     {
         return $this->taskId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus(): string
-    {
-        return $this->status;
     }
 }
