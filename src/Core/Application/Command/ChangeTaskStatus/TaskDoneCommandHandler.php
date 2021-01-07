@@ -23,5 +23,7 @@ class TaskDoneCommandHandler implements MessageHandlerInterface
         $task = $this->taskRepository->findByUuid($changeTaskStatusCommand->getTaskId());
 
         $task->markAsDone();
+
+        $this->taskRepository->save($task);
     }
 }

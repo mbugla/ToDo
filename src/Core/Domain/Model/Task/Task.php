@@ -23,14 +23,18 @@ final class Task extends Aggregate
 
     public function __construct(
         UuidInterface $uuid,
-        string $name = null,
         UuidInterface $userId = null,
+        string $name = null,
         string $status = Status::UNDONE
     ) {
-        $this->id     = $uuid;
-        $this->name   = $name;
-        $this->userId = $userId;
-        $this->status = $status;
+        $this->id = $uuid;
+        if ($name) {
+            $this->changeName($name);
+        }
+        if ($userId) {
+            $this->assignToUser($userId);
+        }
+        $this->handleStatus($status);
     }
 
     public function changeName(string $name)
@@ -44,7 +48,7 @@ final class Task extends Aggregate
         $this->nameChanged(new NameChangedEvent($this->getId(), $name));
     }
 
-    public function assignToUser(UuidInterface $userId)
+    public function assignToUser(UuidInterface $userId): void
     {
         $this->assignedUserChanged(
             new AssignedUserChangedEvent($this->getId(), $userId)
@@ -98,7 +102,18 @@ final class Task extends Aggregate
         $this->raise($event);
     }
 
-    public function apply(DomainEvent $event): void
+    public static function recreateFrom(UuidInterface $id, array $events): Task
+    {
+        $task = new self($id);
+
+        foreach ($events as $event) {
+            $task->apply($event);
+        }
+
+        return $task;
+    }
+
+    private function apply(DomainEvent $event): void
     {
         switch ($event->getType()) {
             case AssignedUserChangedEvent::TYPE:
@@ -114,6 +129,21 @@ final class Task extends Aggregate
                 throw new InvalidArgumentException(
                     sprintf("Type: %s not supported", $event->getType())
                 );
+        }
+    }
+
+    /**
+     * @param string $status
+     */
+    private function handleStatus(string $status): void
+    {
+        switch ($status) {
+            case Status::DONE:
+                $this->markAsDone();
+                break;
+            case Status::UNDONE:
+                $this->markAsUndone();
+                break;
         }
     }
 }

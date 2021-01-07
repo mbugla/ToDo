@@ -16,7 +16,7 @@ class TaskTest extends TestCase
      */
     public function it_should_keep_name_of_task()
     {
-        $task = new Task(Uuid::uuid4(), 'name', Uuid::uuid4(), Status::UNDONE);
+        $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
         Assert::assertEquals('name', $task->getName());
     }
@@ -26,7 +26,7 @@ class TaskTest extends TestCase
      */
     public function it_allows_to_change_the_name()
     {
-        $task = new Task(Uuid::uuid4(), 'name', Uuid::uuid4(), Status::UNDONE);
+        $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
         $task->changeName('new name');
 
@@ -40,7 +40,7 @@ class TaskTest extends TestCase
     {
         self::expectException(NameToShortException::class);
 
-        $task = new Task(Uuid::uuid4(), 'name', Uuid::uuid4(), Status::UNDONE);
+        $task = new Task(Uuid::uuid4(), Uuid::uuid4(), 'name', Status::UNDONE);
 
         $task->changeName('n');
     }

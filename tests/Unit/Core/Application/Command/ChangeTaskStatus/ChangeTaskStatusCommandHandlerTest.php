@@ -23,7 +23,7 @@ class ChangeTaskStatusCommandHandlerTest extends TestCase
 
         $taskId = Uuid::uuid4();
         $userId = Uuid::uuid4();
-        $task   = new Task($taskId, 'name', $userId, Status::UNDONE);
+        $task   = new Task($taskId, $userId,'name', Status::UNDONE);
         $taskRepository->save($task);
         $command = new TaskDoneCommand($taskId);
 

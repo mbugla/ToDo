@@ -9,7 +9,7 @@ use Ramsey\Uuid\UuidInterface;
 
 class InMemoryTaskRepository implements TaskRepositoryInterface
 {
-    /** @var DomainEvent[] */
+    /** @var DomainEvent[][] */
     private array $events = [];
 
     /** @var Task[][] */
@@ -31,14 +31,15 @@ class InMemoryTaskRepository implements TaskRepositoryInterface
 
     public function findByUuid(UuidInterface $id): ?Task
     {
-        $task = new Task($id);
-        foreach ($this->events as $taskEvent) {
-            if ($taskEvent->getAggregateId()->equals($id)) {
-                $task->apply($taskEvent);
-            }
+        if (!array_key_exists($id->toString(), $this->events)) {
+            return null;
         }
 
-        return $task;
+        if (count($this->events[$id->toString()]) > 0) {
+            return Task::recreateFrom($id, $this->events[$id->toString()]);
+        }
+
+        return null;
     }
 
     public function save(Task $task): void
