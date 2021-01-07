@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Core\Application\REST\Task;
 
+use App\Core\Application\Command\CreateTask\CreateTaskCommand;
 use App\Core\Domain\Model\User\UserFetcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +42,12 @@ class CreateTaskAction
     public function __invoke(Request $request): Response
     {
         $user = $this->userFetcher->fetchRequiredUser();
+
+        $requestData = json_decode($request->getContent());
+
+        $command = new CreateTaskCommand($requestData->name, $user->getId());
+
+        $this->handle($command);
 
         return new JsonResponse();
     }
