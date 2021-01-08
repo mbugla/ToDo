@@ -48,6 +48,6 @@ final class AssignedUserChangedEvent implements DomainEvent
 
     public function getValue()
     {
-        return $this->userId;
+        return $this->userId->toString();
     }
 }

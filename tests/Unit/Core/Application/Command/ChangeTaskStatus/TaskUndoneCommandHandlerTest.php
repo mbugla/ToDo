@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit\Core\Application\Command\CreateTask;
+namespace App\Tests\Unit\Core\Application\Command\ChangeTaskStatus;
 
 use App\Core\Application\Command\ChangeTaskStatus\TaskUndoneCommand;
 use App\Core\Application\Command\ChangeTaskStatus\TaskUndoneCommandHandler;
